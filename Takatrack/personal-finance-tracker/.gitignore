@@ -1,0 +1,16 @@
+# Environment & Local Secrets
+.env
+.env.local
+.env.*.local
+js/env.js
+
+# Vercel & Node
+.vercel
+node_modules/
+npm-debug.log*
+
+# OS & Editor Files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
