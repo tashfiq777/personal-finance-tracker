@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#0F766E" />
+  <title>Reports &amp; Analytics — TakaTrack</title>
+  <link rel="manifest" href="../manifest.json" />
+  <link rel="icon" type="image/svg+xml" href="../assets/icons/favicon.svg" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/components.css" />
+  <link rel="stylesheet" href="../css/dashboard.css" />
+  <link rel="stylesheet" href="../css/responsive.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js" defer></script>
+</head>
+<body>
+  <div id="auth-root" class="hidden"></div>
+
+  <div id="app-shell" class="app-shell hidden">
+    <aside id="desktop-sidebar" class="desktop-sidebar"></aside>
+
+    <main class="app-main">
+      <header class="top-bar">
+        <div>
+          <h1 class="page-title">Reports</h1>
+          <p class="page-subtitle">Calculated live from your database records</p>
+        </div>
+        <div class="month-switcher" role="group" aria-label="Select report month">
+          <button type="button" id="rep-prev-month" class="btn btn-ghost btn-icon" aria-label="Previous month">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M15 18l-6-6 6-6"/></svg>
+          </button>
+          <span id="rep-month-label" class="month-label">Loading...</span>
+          <button type="button" id="rep-next-month" class="btn btn-ghost btn-icon" aria-label="Next month">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 18l6-6-6-6"/></svg>
+          </button>
+        </div>
+      </header>
+
+      <!-- Monthly Summary KPIs -->
+      <section class="kpi-grid" style="grid-template-columns:repeat(auto-fit,minmax(145px,1fr));">
+        <div class="kpi-card">
+          <span class="kpi-label">Monthly Income</span>
+          <span class="kpi-value text-income tabular-nums" id="rep-m-income">৳0</span>
+        </div>
+        <div class="kpi-card">
+          <span class="kpi-label">Monthly Expenses</span>
+          <span class="kpi-value text-expense tabular-nums" id="rep-m-expenses">৳0</span>
+        </div>
+        <div class="kpi-card">
+          <span class="kpi-label">Net Cash Flow</span>
+          <span class="kpi-value tabular-nums" id="rep-m-net">৳0</span>
+        </div>
+        <div class="kpi-card">
+          <span class="kpi-label">Avg Monthly Spend (<span id="rep-year-inline"></span>)</span>
+          <span class="kpi-value tabular-nums" id="rep-y-avg">৳0</span>
+        </div>
+      </section>
+
+      <!-- Charts Grid -->
+      <div class="reports-grid">
+        <section class="chart-card">
+          <h2 class="section-title" style="margin-bottom:10px;">Daily Spending</h2>
+          <div class="chart-wrap">
+            <canvas id="daily-spending-chart"></canvas>
+          </div>
+        </section>
+
+        <section class="chart-card">
+          <h2 class="section-title" style="margin-bottom:10px;">Spending by Category</h2>
+          <div class="chart-wrap">
+            <canvas id="category-chart"></canvas>
+          </div>
+          <div id="category-breakdown-list" class="stack-sm" style="margin-top:14px;"></div>
+        </section>
+
+        <section class="chart-card" style="grid-column:1 / -1;">
+          <div class="row-between" style="margin-bottom:10px;">
+            <h2 class="section-title">Income vs. Expenses (<span id="rep-year-heading"></span>)</h2>
+            <div class="row">
+              <button type="button" id="rep-prev-year" class="btn btn-secondary btn-sm">← Year</button>
+              <button type="button" id="rep-next-year" class="btn btn-secondary btn-sm">Year →</button>
+            </div>
+          </div>
+          <div class="chart-wrap" style="height:280px;">
+            <canvas id="yearly-comparison-chart"></canvas>
+          </div>
+        </section>
+      </div>
+
+      <!-- Yearly Summary & Outstanding Debts -->
+      <section class="section-header">
+        <h2 class="section-title">Yearly Highlights &amp; Balances</h2>
+      </section>
+      <section class="kpi-grid" style="grid-template-columns:repeat(auto-fit,minmax(160px,1fr));">
+        <div class="kpi-card">
+          <span class="kpi-label">Yearly Income</span>
+          <span class="kpi-value text-income tabular-nums" id="rep-y-income">৳0</span>
+        </div>
+        <div class="kpi-card">
+          <span class="kpi-label">Yearly Expenses</span>
+          <span class="kpi-value text-expense tabular-nums" id="rep-y-expenses">৳0</span>
+        </div>
+        <div class="kpi-card">
+          <span class="kpi-label">Highest-Spending Month</span>
+          <span class="kpi-value tabular-nums" id="rep-y-highest">—</span>
+          <span class="kpi-sub tabular-nums" id="rep-y-highest-amt"></span>
+        </div>
+        <div class="kpi-card">
+          <span class="kpi-label">Outstanding Borrowed</span>
+          <span class="kpi-value text-payable tabular-nums" id="rep-total-owed">৳0</span>
+        </div>
+        <div class="kpi-card">
+          <span class="kpi-label">Outstanding Lent</span>
+          <span class="kpi-value text-receivable tabular-nums" id="rep-total-lent">৳0</span>
+        </div>
+      </section>
+    </main>
+
+    <nav id="bottom-nav" class="bottom-nav" aria-label="Mobile Navigation"></nav>
+  </div>
+
+  <script src="../js/boot-guard.js"></script>
+  <script type="module" src="../js/reports.js"></script>
+</body>
+</html>

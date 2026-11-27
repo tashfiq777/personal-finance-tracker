@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#0F766E" />
+  <title>Activity &amp; Transaction History — TakaTrack</title>
+  <link rel="manifest" href="../manifest.json" />
+  <link rel="icon" type="image/svg+xml" href="../assets/icons/favicon.svg" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/components.css" />
+  <link rel="stylesheet" href="../css/dashboard.css" />
+  <link rel="stylesheet" href="../css/responsive.css" />
+</head>
+<body>
+  <div id="auth-root" class="hidden"></div>
+
+  <div id="app-shell" class="app-shell hidden">
+    <aside id="desktop-sidebar" class="desktop-sidebar"></aside>
+
+    <main class="app-main">
+      <header class="top-bar">
+        <div>
+          <h1 class="page-title">Activity</h1>
+          <p class="page-subtitle" id="activity-count-sub">Unified transaction history</p>
+        </div>
+        <div class="top-bar-actions">
+          <button type="button" id="reset-filters-btn" class="btn btn-secondary btn-sm">Reset</button>
+        </div>
+      </header>
+
+      <!-- Search & Multi-Facet Filters -->
+      <section class="card" style="margin-bottom:16px;" aria-label="Filters">
+        <div class="form-group" style="margin-bottom:12px;">
+          <label class="sr-only" for="filter-search">Search transactions</label>
+          <input id="filter-search" class="form-input" type="search" placeholder="Search by description, person, or category..." />
+        </div>
+
+        <div class="filter-bar">
+          <div class="form-group">
+            <label class="form-label" for="filter-type">Type</label>
+            <select id="filter-type" class="form-select">
+              <option value="all">All Types</option>
+              <option value="expense">Expense</option>
+              <option value="income">Income</option>
+              <option value="borrow">Money Borrowed</option>
+              <option value="lend">Money Lent</option>
+              <option value="repay_debt">Debt Repayment</option>
+              <option value="collect_loan">Loan Collection</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="filter-category">Category</label>
+            <select id="filter-category" class="form-select">
+              <option value="all">All Categories</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="filter-person">Person</label>
+            <select id="filter-person" class="form-select">
+              <option value="all">All People</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="filter-sort">Sort By</label>
+            <select id="filter-sort" class="form-select">
+              <option value="date_desc">Newest First</option>
+              <option value="date_asc">Oldest First</option>
+              <option value="amount_desc">Highest Amount</option>
+              <option value="amount_asc">Lowest Amount</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="filter-from">From Date</label>
+            <input id="filter-from" class="form-input" type="date" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="filter-to">To Date</label>
+            <input id="filter-to" class="form-input" type="date" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="filter-min">Min Amount (৳)</label>
+            <input id="filter-min" class="form-input" type="number" min="0" inputmode="numeric" placeholder="0" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="filter-max">Max Amount (৳)</label>
+            <input id="filter-max" class="form-input" type="number" min="0" inputmode="numeric" placeholder="Any" />
+          </div>
+        </div>
+      </section>
+
+      <!-- Grouped Ledger -->
+      <section id="activity-list-root" aria-live="polite">
+        <div class="card"><div class="skeleton"></div></div>
+      </section>
+    </main>
+
+    <nav id="bottom-nav" class="bottom-nav" aria-label="Mobile Navigation"></nav>
+  </div>
+
+  <!-- Edit Transaction Modal -->
+  <div id="edit-tx-modal" class="modal-backdrop hidden">
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="edit-tx-title">
+      <div class="modal-header">
+        <h2 class="modal-title" id="edit-tx-title">Edit Transaction</h2>
+        <button type="button" class="btn btn-ghost btn-icon" id="close-edit-tx" aria-label="Close">✕</button>
+      </div>
+      <form id="edit-tx-form" class="stack-sm" novalidate>
+        <div class="form-group">
+          <label class="form-label" for="edit-amount">Amount (BDT) *</label>
+          <div class="input-with-prefix">
+            <span class="input-prefix">৳</span>
+            <input id="edit-amount" class="form-input quick-amount-input tabular-nums" type="text" inputmode="numeric" pattern="[0-9]*" required />
+          </div>
+        </div>
+        <div class="form-group" id="edit-category-group">
+          <label class="form-label" for="edit-category">Category</label>
+          <select id="edit-category" class="form-select"></select>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="edit-date">Date *</label>
+          <input id="edit-date" class="form-input" type="date" required />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="edit-description">Description (optional)</label>
+          <input id="edit-description" class="form-input" type="text" maxlength="300" />
+        </div>
+        <p id="edit-error" class="form-error hidden"></p>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary" id="cancel-edit-tx">Cancel</button>
+          <button type="submit" id="edit-submit-btn" class="btn btn-primary">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="../js/boot-guard.js"></script>
+  <script type="module" src="../js/transactions.js"></script>
+</body>
+</html>

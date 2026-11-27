@@ -1,0 +1,10 @@
+{
+  "name": "personal-finance-tracker",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Mobile-first personal finance tracker PWA in Bangladeshi Taka (BDT) powered by Supabase and Vercel.",
+  "scripts": {
+    "test": "node --test tests/accounting.test.mjs"
+  }
+}

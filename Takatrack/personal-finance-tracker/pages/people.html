@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#0F766E" />
+  <title>People &amp; Debts — TakaTrack</title>
+  <link rel="manifest" href="../manifest.json" />
+  <link rel="icon" type="image/svg+xml" href="../assets/icons/favicon.svg" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/components.css" />
+  <link rel="stylesheet" href="../css/dashboard.css" />
+  <link rel="stylesheet" href="../css/responsive.css" />
+</head>
+<body>
+  <div id="auth-root" class="hidden"></div>
+
+  <div id="app-shell" class="app-shell hidden">
+    <aside id="desktop-sidebar" class="desktop-sidebar"></aside>
+
+    <main class="app-main">
+      <header class="top-bar">
+        <div>
+          <h1 class="page-title">People &amp; Debts</h1>
+          <p class="page-subtitle">Tracked separately from income &amp; expenses</p>
+        </div>
+        <div class="top-bar-actions">
+          <button type="button" id="add-loan-btn" class="btn btn-primary btn-sm">+ Record</button>
+        </div>
+      </header>
+
+      <!-- Summary Cards -->
+      <section class="kpi-grid" aria-label="Debt Summary">
+        <div class="kpi-card">
+          <span class="kpi-label">People I Owe</span>
+          <span class="kpi-value text-payable tabular-nums" id="summary-payable">৳0</span>
+        </div>
+        <div class="kpi-card">
+          <span class="kpi-label">People Who Owe Me</span>
+          <span class="kpi-value text-receivable tabular-nums" id="summary-receivable">৳0</span>
+        </div>
+      </section>
+
+      <!-- Two Clearly Separated Sections -->
+      <div class="segmented-tabs" role="tablist" style="margin-bottom:14px;">
+        <button type="button" role="tab" class="segmented-tab active" data-tab="payable">People I Owe</button>
+        <button type="button" role="tab" class="segmented-tab" data-tab="receivable">People Who Owe Me</button>
+      </div>
+
+      <!-- Search by Name -->
+      <div class="form-group" style="margin-bottom:14px;">
+        <label class="sr-only" for="people-search">Search people by name</label>
+        <input id="people-search" class="form-input" type="search" placeholder="Search person by name..." />
+      </div>
+
+      <section id="people-list-root" class="stack-sm" aria-live="polite">
+        <div class="card"><div class="skeleton"></div></div>
+      </section>
+    </main>
+
+    <nav id="bottom-nav" class="bottom-nav" aria-label="Mobile Navigation"></nav>
+  </div>
+
+  <!-- Record Borrowing / Lending Modal -->
+  <div id="loan-modal" class="modal-backdrop hidden">
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="loan-modal-title">
+      <div class="modal-header">
+        <h2 class="modal-title" id="loan-modal-title">Record Borrowing / Lending</h2>
+        <button type="button" class="btn btn-ghost btn-icon" id="close-loan-modal" aria-label="Close">✕</button>
+      </div>
+      <form id="loan-form" class="stack-sm" novalidate>
+        <div class="form-group">
+          <label class="form-label" for="loan-direction">Type</label>
+          <select id="loan-direction" class="form-select">
+            <option value="payable">I Borrowed Money (I owe them)</option>
+            <option value="receivable">I Lent Money (They owe me)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="loan-person-name">Person's Name *</label>
+          <input id="loan-person-name" class="form-input" list="existing-people-datalist" type="text" required maxlength="100" placeholder="Enter or pick existing person" />
+          <datalist id="existing-people-datalist"></datalist>
+          <small style="color:var(--text-muted);font-size:0.78rem;">Using an existing name automatically appends to that person's single profile.</small>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="loan-amount">Amount (BDT) *</label>
+          <div class="input-with-prefix">
+            <span class="input-prefix">৳</span>
+            <input id="loan-amount" class="form-input quick-amount-input tabular-nums" type="text" inputmode="numeric" pattern="[0-9]*" placeholder="0" required />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="loan-date">Date</label>
+          <input id="loan-date" class="form-input" type="date" required />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="loan-description">Note / Description (optional)</label>
+          <input id="loan-description" class="form-input" type="text" maxlength="300" placeholder="e.g. Semester fee, lunch split" />
+        </div>
+
+        <p id="loan-error" class="form-error hidden"></p>
+
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary" id="cancel-loan-modal">Cancel</button>
+          <button type="submit" id="loan-submit-btn" class="btn btn-primary">Save Record</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="../js/boot-guard.js"></script>
+  <script type="module" src="../js/people.js"></script>
+</body>
+</html>

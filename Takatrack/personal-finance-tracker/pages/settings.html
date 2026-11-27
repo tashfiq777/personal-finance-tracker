@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#0F766E" />
+  <title>Settings — TakaTrack</title>
+  <link rel="manifest" href="../manifest.json" />
+  <link rel="icon" type="image/svg+xml" href="../assets/icons/favicon.svg" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/components.css" />
+  <link rel="stylesheet" href="../css/dashboard.css" />
+  <link rel="stylesheet" href="../css/responsive.css" />
+</head>
+<body>
+  <div id="auth-root" class="hidden"></div>
+
+  <div id="app-shell" class="app-shell hidden">
+    <aside id="desktop-sidebar" class="desktop-sidebar"></aside>
+
+    <main class="app-main">
+      <header class="top-bar">
+        <div>
+          <h1 class="page-title">Settings</h1>
+          <p class="page-subtitle" id="settings-account-email">Account &amp; preferences</p>
+        </div>
+      </header>
+
+      <div class="stack-md">
+        <!-- Appearance / Theme -->
+        <section class="card">
+          <h2 class="section-title" style="margin-bottom:10px;">Appearance</h2>
+          <div class="segmented-tabs" style="grid-template-columns:repeat(3,1fr);">
+            <button type="button" class="segmented-tab" data-theme-choice="system">System</button>
+            <button type="button" class="segmented-tab" data-theme-choice="light">Light</button>
+            <button type="button" class="segmented-tab" data-theme-choice="dark">Dark</button>
+          </div>
+        </section>
+
+        <!-- Custom Categories -->
+        <section class="card">
+          <h2 class="section-title" style="margin-bottom:10px;">Custom Categories</h2>
+          <form id="add-category-form" class="quick-row" style="margin-bottom:14px;">
+            <input id="cat-name-input" class="form-input" type="text" maxlength="50" placeholder="New category name (e.g. Tuition, Fuel)" required />
+            <div class="row">
+              <select id="cat-type-select" class="form-select">
+                <option value="expense">Expense</option>
+                <option value="income">Income</option>
+              </select>
+              <button type="submit" class="btn btn-primary" style="flex-shrink:0;">Add</button>
+            </div>
+          </form>
+          <div id="categories-list" class="stack-sm"></div>
+        </section>
+
+        <!-- Offline Queue & Sync -->
+        <section class="card">
+          <div class="row-between">
+            <div>
+              <h2 class="section-title">Offline Sync Queue</h2>
+              <p class="text-muted" style="margin:2px 0 0;font-size:0.84rem;" id="sync-queue-summary">Checking status...</p>
+            </div>
+            <button type="button" id="manual-sync-btn" class="btn btn-secondary btn-sm">Sync Now</button>
+          </div>
+        </section>
+
+        <!-- Export & Backup -->
+        <section class="card">
+          <h2 class="section-title" style="margin-bottom:6px;">Data Export &amp; Backup</h2>
+          <p class="text-muted" style="margin:0 0 14px;font-size:0.86rem;">
+            Export all transactions as Excel-compatible CSV or save/restore a complete JSON backup.
+          </p>
+          <div class="row wrap">
+            <button type="button" id="export-csv-btn" class="btn btn-secondary">Export CSV (Excel)</button>
+            <button type="button" id="export-json-btn" class="btn btn-secondary">Download JSON Backup</button>
+            <label class="btn btn-primary" for="import-json-input" style="cursor:pointer;">
+              Restore JSON Backup
+              <input id="import-json-input" type="file" accept="application/json,.json" class="sr-only" />
+            </label>
+          </div>
+        </section>
+
+        <!-- Account Sign Out -->
+        <section class="card">
+          <div class="row-between">
+            <div>
+              <h2 class="section-title">Account</h2>
+              <p class="text-muted" style="margin:2px 0 0;font-size:0.84rem;">Your data is private and protected by Supabase Row Level Security.</p>
+            </div>
+            <button type="button" id="logout-btn" class="btn btn-danger-soft">Sign Out</button>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <nav id="bottom-nav" class="bottom-nav" aria-label="Mobile Navigation"></nav>
+  </div>
+
+  <script src="../js/boot-guard.js"></script>
+  <script type="module" src="../js/settings.js"></script>
+</body>
+</html>

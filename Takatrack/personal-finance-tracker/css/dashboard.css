@@ -1,0 +1,213 @@
+/* ==========================================================================
+   dashboard.css — Dashboard KPI Cards, Quick Expense/Income Entry, Charts
+   ========================================================================== */
+
+/* Hero Net Cash Flow Card */
+.net-flow-card {
+  background: linear-gradient(135deg, #0F766E 0%, #115E59 100%);
+  color: #FFFFFF;
+  border: none;
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  box-shadow: var(--shadow-md);
+  margin-bottom: 14px;
+}
+
+[data-theme="dark"] .net-flow-card {
+  background: linear-gradient(135deg, #115E59 0%, #0F3D3E 100%);
+}
+
+.net-flow-label {
+  font-size: 0.82rem;
+  opacity: 0.86;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.net-flow-value {
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  margin: 4px 0 12px;
+}
+
+.net-flow-split {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.net-split-item span {
+  display: block;
+  font-size: 0.76rem;
+  opacity: 0.82;
+}
+
+.net-split-item strong {
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+/* KPI Grid (Debt & Receivables) */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.kpi-card {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.kpi-label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.kpi-value {
+  font-size: 1.28rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.kpi-sub {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+/* Prominent Quick Expense Entry Card */
+.quick-entry-card {
+  background: var(--bg-elevated);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 18px;
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 18px;
+}
+
+.quick-entry-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.quick-entry-title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.quick-amount-input {
+  font-size: 1.55rem !important;
+  font-weight: 800;
+  min-height: 54px !important;
+  letter-spacing: -0.02em;
+}
+
+.quick-chips {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 4px 0 8px;
+  scrollbar-width: none;
+}
+
+.quick-chips::-webkit-scrollbar {
+  display: none;
+}
+
+.chip {
+  flex-shrink: 0;
+  min-height: 36px;
+  padding: 6px 13px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--border);
+  background: var(--bg-subtle);
+  color: var(--text-secondary);
+  font-size: 0.82rem;
+  font-weight: 600;
+  transition: background var(--transition), color var(--transition), border-color var(--transition);
+}
+
+.chip.active {
+  background: var(--primary);
+  color: var(--primary-contrast);
+  border-color: var(--primary);
+}
+
+.quick-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+/* Charts & Reports Layout */
+.chart-card {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 16px;
+}
+
+.chart-wrap {
+  position: relative;
+  width: 100%;
+  height: 250px;
+}
+
+.reports-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+}
+
+/* People Summary Cards */
+.person-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  color: var(--text);
+}
+
+.person-card:hover {
+  border-color: var(--primary);
+}
+
+.person-balance {
+  font-size: 1.08rem;
+  font-weight: 800;
+  text-align: right;
+}
+
+.progress-track {
+  height: 7px;
+  width: 100%;
+  background: var(--bg-subtle);
+  border-radius: var(--radius-pill);
+  overflow: hidden;
+  margin-top: 6px;
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--primary);
+  border-radius: var(--radius-pill);
+  transition: width 260ms ease;
+}

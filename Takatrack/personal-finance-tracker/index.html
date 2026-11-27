@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#0F766E" />
+  <meta name="description" content="Private personal finance tracker in Bangladeshi Taka (BDT) for daily expenses, income, debts, loans, and monthly reports." />
+  <title>TakaTrack — Personal Finance Dashboard</title>
+  <link rel="manifest" href="./manifest.json" />
+  <link rel="icon" type="image/svg+xml" href="./assets/icons/favicon.svg" />
+  <link rel="apple-touch-icon" href="./assets/icons/icon-192.png" />
+  <link rel="stylesheet" href="./css/style.css" />
+  <link rel="stylesheet" href="./css/components.css" />
+  <link rel="stylesheet" href="./css/dashboard.css" />
+  <link rel="stylesheet" href="./css/responsive.css" />
+</head>
+<body>
+  <div id="auth-root" class="hidden"></div>
+
+  <div id="app-shell" class="app-shell hidden">
+    <aside id="desktop-sidebar" class="desktop-sidebar"></aside>
+
+    <main class="app-main">
+      <header class="top-bar">
+        <div>
+          <h1 class="page-title">Dashboard</h1>
+          <p class="page-subtitle" id="dashboard-date-sub">Bangladeshi Taka (৳)</p>
+        </div>
+        <div class="top-bar-actions">
+          <div class="sync-pill" aria-live="polite"><span class="sync-dot"></span><span>Online</span></div>
+        </div>
+      </header>
+
+      <!-- Month Navigation -->
+      <div class="row-between" style="margin-bottom:14px;">
+        <div class="month-switcher" role="group" aria-label="Select month">
+          <button type="button" id="prev-month-btn" class="btn btn-ghost btn-icon" aria-label="Previous month">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M15 18l-6-6 6-6"/></svg>
+          </button>
+          <span id="current-month-label" class="month-label">Loading...</span>
+          <button type="button" id="next-month-btn" class="btn btn-ghost btn-icon" aria-label="Next month">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 18l6-6-6-6"/></svg>
+          </button>
+        </div>
+        <button type="button" id="open-income-modal-btn" class="btn btn-income btn-sm">
+          + Add Income
+        </button>
+      </div>
+
+      <div class="dashboard-desktop-grid">
+        <!-- Left Column: Summary Cards -->
+        <div>
+          <section class="net-flow-card" aria-label="Monthly Cash Flow Summary">
+            <div class="net-flow-label">Net Cash Flow (Income − Expenses)</div>
+            <div class="net-flow-value tabular-nums" id="kpi-net-flow">৳0</div>
+            <div class="net-flow-split">
+              <div class="net-split-item">
+                <span>Monthly Income</span>
+                <strong class="tabular-nums" id="kpi-income">৳0</strong>
+              </div>
+              <div class="net-split-item">
+                <span>Monthly Expenses</span>
+                <strong class="tabular-nums" id="kpi-expenses">৳0</strong>
+              </div>
+            </div>
+          </section>
+
+          <section class="kpi-grid" aria-label="Debt and Lending Balances">
+            <a href="./pages/people.html?tab=payable" class="kpi-card card-interactive">
+              <span class="kpi-label">I Currently Owe</span>
+              <span class="kpi-value text-payable tabular-nums" id="kpi-i-owe">৳0</span>
+              <span class="kpi-sub">Excluded from expenses</span>
+            </a>
+            <a href="./pages/people.html?tab=receivable" class="kpi-card card-interactive">
+              <span class="kpi-label">Owed To Me</span>
+              <span class="kpi-value text-receivable tabular-nums" id="kpi-owed-to-me">৳0</span>
+              <span class="kpi-sub">Excluded from income</span>
+            </a>
+          </section>
+        </div>
+
+        <!-- Right Column: Prominent One-Tap Quick Expense Entry -->
+        <section class="quick-entry-card" aria-label="Quick Expense Entry">
+          <div class="quick-entry-header">
+            <h2 class="quick-entry-title">Quick Expense</h2>
+            <span class="badge badge-neutral" id="quick-date-badge">Today</span>
+          </div>
+
+          <form id="quick-expense-form" class="stack-sm" novalidate>
+            <div class="form-group">
+              <label class="form-label" for="qe-amount">Amount (BDT) *</label>
+              <div class="input-with-prefix">
+                <span class="input-prefix">৳</span>
+                <input
+                  id="qe-amount"
+                  class="form-input quick-amount-input tabular-nums"
+                  type="text"
+                  inputmode="numeric"
+                  pattern="[0-9]*"
+                  autocomplete="off"
+                  placeholder="0"
+                  required
+                />
+              </div>
+            </div>
+
+            <div class="quick-chips" id="qe-category-chips" role="group" aria-label="Quick expense categories"></div>
+
+            <div class="quick-row">
+              <div class="form-group">
+                <label class="form-label" for="qe-description">Description (optional)</label>
+                <input id="qe-description" class="form-input" type="text" maxlength="300" placeholder="e.g. Lunch, rickshaw fare" />
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="qe-category">Category (optional)</label>
+                <select id="qe-category" class="form-select">
+                  <option value="">Uncategorized</option>
+                </select>
+              </div>
+            </div>
+
+            <p id="qe-error" class="form-error hidden"></p>
+
+            <button type="submit" id="qe-submit-btn" class="btn btn-primary btn-block">
+              Add Expense
+            </button>
+          </form>
+        </section>
+      </div>
+
+      <!-- Recent Activity for Selected Month -->
+      <section aria-label="Recent Activity">
+        <div class="section-header">
+          <h2 class="section-title">Recent This Month</h2>
+          <a href="./pages/activity.html" style="font-size:0.86rem;font-weight:600;">View All →</a>
+        </div>
+        <div id="recent-transactions-root">
+          <div class="card"><div class="skeleton"></div></div>
+        </div>
+      </section>
+    </main>
+
+    <nav id="bottom-nav" class="bottom-nav" aria-label="Mobile Navigation"></nav>
+  </div>
+
+  <!-- Quick Income Modal -->
+  <div id="income-modal" class="modal-backdrop hidden">
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="income-modal-title">
+      <div class="modal-header">
+        <h2 class="modal-title" id="income-modal-title">Add Income</h2>
+        <button type="button" class="btn btn-ghost btn-icon" id="close-income-modal" aria-label="Close">✕</button>
+      </div>
+      <form id="quick-income-form" class="stack-sm" novalidate>
+        <div class="form-group">
+          <label class="form-label" for="qi-amount">Amount (BDT) *</label>
+          <div class="input-with-prefix">
+            <span class="input-prefix">৳</span>
+            <input id="qi-amount" class="form-input quick-amount-input tabular-nums" type="text" inputmode="numeric" pattern="[0-9]*" placeholder="0" required />
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="qi-category">Category (optional)</label>
+          <select id="qi-category" class="form-select">
+            <option value="">Uncategorized</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="qi-description">Description (optional)</label>
+          <input id="qi-description" class="form-input" type="text" maxlength="300" placeholder="e.g. Monthly salary, tuition, gift" />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="qi-date">Date</label>
+          <input id="qi-date" class="form-input" type="date" required />
+        </div>
+        <p id="qi-error" class="form-error hidden"></p>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary" id="cancel-income-modal">Cancel</button>
+          <button type="submit" id="qi-submit-btn" class="btn btn-income">Save Income</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="./js/boot-guard.js"></script>
+  <script type="module" src="./js/dashboard.js"></script>
+</body>
+</html>
